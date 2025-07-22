@@ -8,6 +8,11 @@
 #include <SPI.h>
 #include "nRF24L01.h"
 #include "RF24.h"
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+
 
 RF24 radio(9, 10); // "создать" модуль на пинах 9 и 10 Для Уно
 //RF24 radio(9,53); // для Меги
@@ -20,6 +25,14 @@ int y_pot_pin=A3;
 int transmit_data[3];  // массив, хранящий передаваемые данные
 
 void setup() {
+lcd.init();                      // initialize the lcd 
+  lcd.init();
+  // Print a message to the LCD.
+  lcd.backlight();
+  lcd.setCursor(6,0);
+  lcd.print("MARS");
+  
+  
   Serial.begin(9600);   //открываем порт для связи с ПК
 
   //pinMode(button, INPUT_PULLUP); // настроить пин кнопки
@@ -43,11 +56,9 @@ void setup() {
 }
 
 void loop() {
-  // инвертированный (!) сигнал с кнопки
+  
   transmit_data[0] = 1;
- // Serial.println(analogRead(y_pot_pin));
   transmit_data[1] = analogRead(x_pot_pin); // получить значение
-  // в диапазоне 0..1023, перевести в 0..180, и записать на 1 место в массиве
   transmit_data[2] = analogRead(y_pot_pin);
 
 
